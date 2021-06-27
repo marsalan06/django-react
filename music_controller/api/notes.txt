@@ -1,0 +1,15 @@
+- after basic django setup now move to react 
+- verfiy npm by typing npm in music_controller directory 
+- create new app in project , called front end , django-admin startapp frontend
+- cd frontend, we'll place all react files in it 
+- templates and static folder to be created in it 
+- in the static folder place in CSS, frontend and images folder in 
+- create another folder in frontend app called src and in src we'll make componenets
+- init an npm project, npm init -y command from frontend folder
+- the above command creates a package.json file in the frontend folder
+    - a file with the app name, its version and some other details 
+    in json format
+- npm i webpack webpack-cli --save-dev , this will take our all js resources and package it 
+    as a singel module 
+- transpile, take source code written in one high level language and convert it to another language 
+to be sent to the second language's compiler 
