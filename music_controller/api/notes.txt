@@ -3,13 +3,77 @@
 - create new app in project , called front end , django-admin startapp frontend
 - cd frontend, we'll place all react files in it 
 - templates and static folder to be created in it 
-- in the static folder place in CSS, frontend and images folder in 
-- create another folder in frontend app called src and in src we'll make componenets
+- in the static folder place in CSS, frontend(contains main js) and images folder 
+- create another folder in frontend app called "src" and in src we'll make componenets
+
 - init an npm project, npm init -y command from frontend folder
 - the above command creates a package.json file in the frontend folder
     - a file with the app name, its version and some other details 
     in json format
+
 - npm i webpack webpack-cli --save-dev , this will take our all js resources and package it 
     as a singel module 
 - transpile, take source code written in one high level language and convert it to another language 
 to be sent to the second language's compiler 
+
+- npm i @babel/core babel-loader @babel/preset-env @babel/preset-react --save-dev
+to install babel, 
+
+- npm i react react-dom --save-dev
+
+- npm install @material-ui/core (for frontend same as bootstrap)
+
+- npm install @babel/plugin-proposal-class-properties (async and await use in js)
+
+- npm install react-router-dom (routing)
+
+- npm install @material-ui/icons
+
+
+Configurations scripts are for frontend app and we create files like babel.config.json
+--> these set up the babel loader and its plugins, just copy paste from github https://github.com/techwithtim/Music-Controller-Web-App-Tutorial/blob/main/Tutorial%201%20-%204/frontend/babel.config.json
+--> webpack.config.js (bundling of all js into one file) this file has the path for js entery and final placement of the 
+compile file , https://github.com/techwithtim/Music-Controller-Web-App-Tutorial/blob/main/Tutorial%201%20-%204/frontend/webpack.config.js
+--> in frontend/package.json in the scripts: directory we'll add  
+{
+    "dev": "webpack --mode development --watch",
+    "build": "webpack --mode production"
+  },
+
+  https://github.com/techwithtim/Music-Controller-Web-App-Tutorial/blob/main/Tutorial%201%20-%204/frontend/package.json
+
+--> in music_controller/frontend/src we'll make our entery file, named index.js,
+    music_controller/frontend/src/index.js , note its ouside components folder
+
+Basically our django will render a html and then react will take over it,
+
+
+--> in music_controller/frontend/templates folder we'll make another folder called frontend and in it a file idex.html
+    music_controller/frontend/templates/frontend/index.html
+
+    In index.html we imported the static content in {%load static%} and added jquery and css style links
+    in the body tag we have 2 divs main and app, react will work in the "app" div,
+    lastly in the script tag we added the static path to frontend folder to file main.js, 
+    --> the working is defined in webpack.config.js , the entery path is src/index.js that refers componenets and spit 
+        out the compiled code as a main.js file in static/frontend
+
+    code from src/index.js goes to webpack and comes out in music_controller/frontend/static/frontend/main.js
+
+--> in views of frontend app we created a function to render the music_controller/frontend/templates/frontend/index.html file,
+    and in the music_controller/urls.py we added the frontend link and created a urls.py in the frontend app to link to the index 
+    view, 
+
+--> now we created a App.js componenet in the src/componenets
+
+    in this componenet we build a class based componenet App and made it a default export , in the same page we got the "app"
+    div and render the app class in it ,render(<App />,appDiv)
+
+--> in index.js we imported this componenet to be sent to webpack to be compiled,  
+
+--> runserver , python manage.py runserver
+--> in new terminal to initiate or run the react code , npm run dev or npm run build
+    but this command should run where the frontend folder is, 
+    --> Conflicting values for 'process.env.NODE_ENV 
+        above error has the following solution
+        --> in webpack.config.js i replaced the JSON.stringify("development") to JSON.stringify("production")
+
