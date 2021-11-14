@@ -77,3 +77,83 @@ Basically our django will render a html and then react will take over it,
         above error has the following solution
         --> in webpack.config.js i replaced the JSON.stringify("development") to JSON.stringify("production")
 
+We create a index.css file in the frontend/static/css folder named index.css as it is being used in index.html,
+in app.js we have react code and we have componenets that are rendered in the html div id=app , now componenets 
+can be made and passed to each other with arguments called props and be rendered in the componenet itself
+    --> Placed the App componenet in App.js in the app div of the index.html with props as i used name
+    
+    export default class App extends Component{
+    constructor(props){
+        super (props);
+    }
+
+    render(){
+        return <h1>{this.props.name}</h1>;
+    }
+}
+
+    const appDiv =document.getElementById("app");
+    render (<App name="tim"/>,appDiv)
+        
+    --> state of a componenet is storage objects of the instance running, place in the constructor
+    as this.state = {},
+
+
+--> routing, HomePage.js to be made in src/componenets and imported in App.js and render by the App componenet
+    RoomJoinPage.js, CreateRoomPage.js. import them in app.js
+    In App.js we returned the render by using a parent div tag, if we dont it gives the error of parent tag missing
+
+    render(){
+            return (
+                <div>
+                    <HomePage />;
+                    <RoomJoinPage/>;
+                    <CreateRoomPage/>;
+                </div>
+            );
+            
+    }
+
+    But we dont want componenets under each other but we want to route to the as normal html pages and django ways but here we 
+    use react routing, 
+    so in app.js we just render HomePage and in HomePage.js we import the routing functionality and use route and Routes method to 
+    route through apps,the exact word in first route is to avoid the collision of paths that happens in react and to avoid its 
+    necesary to use exact in duplicating paths (more in video 4 , after 21 min), but we need to work in the frontend/urls.py, to 
+    have the routes registered in python as well, but the render the same index view,
+    so the flow would be 
+
+    --> views.py (index) renders index.html that has app div the has main.js that has app.js
+    that has HomePage.js and HomePage.js all the routes of other componenets in it     
+    
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    Link,
+    Redirect,} from "react-router-dom";
+
+    export default class HomePage extends Component{
+    constructor(props){
+        super(props);
+    }
+    render(){
+        // return <p>This is the home page</p>
+        return <Router>
+            <Routes>
+                <Route exact path='/' element={<Home />}></Route>
+                <Route path='/join' element={<RoomJoinPage />}></Route>
+                <Route path='/join' element={<CreateRoomPage />}/>
+            </Routes>
+        </Router>
+    }
+}
+    function Home(){
+    return(
+        <div>
+            <h1>This is the home Page</h1>
+        </div>
+    )
+}
+
+        previously Routes were switch and element were component
+
