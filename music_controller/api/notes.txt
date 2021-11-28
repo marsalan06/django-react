@@ -157,3 +157,56 @@ import {
 
         previously Routes were switch and element were component
 
+
+
+Creating API views:
+In views.py of api import rest_framework.views (APIView and Response) .
+In serializer.py of api we will make a serializer class CreateRoomSerializer(serializers.ModelSerializer),
+and the fields we put here are guest_can_pause, votes_to_skip.
+In views.py of api we created a class based view CreateRoomView and used the APIView, this allows us to write
+GET, POST,PUT,DELETE methods sepratly. We use the CreateRoomSerializer as the serializer_class, next thing we use 
+is the session key (django sessions).
+--> def post(self,request,format=None) method uses django session to check for the session key of each instance 
+    and pass on the data to the serializer, then we verify if a room object exists by passing the host, 
+    if yes we update its parameters and if not we just create an object, interesting thing is that the queryset[0] will
+    return me the object (point to remember). We created a route in the urls.py of the api app.
+    
+
+
+We'll work on front end in the CreateRoomPage.js and import a bunch of componenets from the @material-ui/core library
+we use the grid container where spacing is in integer x 8px so {2} is 16 pixels, xs belongs to breakpoint class where 
+There are five grid breakpoints: xs, sm, md, lg, and xl thats the width of the screen max value is 12 we can have multiple
+xs sm and break the 12 among them
+Then we use typography between the grid, when we use form control and form helper text the html code on inspect shows class
+like <p class="MuiFormHelperText-root"><div align="center">Guest Control of Playback State</div></p> so to make them sepratly 
+identified,we used radio buttons for the boolean field in the model , guest can pause. 
+
+We use textfield to record the default votes and pass in the defualt value and for props we place a check of min 1 votes,
+in button we used to and componenet value "Link" so that we can redirect the page on the url given in "to", 
+
+We will use state to send information of form back/forth, we use states and method to set state when an event calls the method 
+"handleVotesChange", if we link this method to an event i.e button clicked it will be stored in the 'e' and called by e.target.value
+and for the boolean value we made the handleGuestCanPauseChange where the taget value is true or false,
+
+TO use these methods we place it as <RadioGroup row defaultValue="true" onChange={this.handleGuestCanPauseChange}>, 
+<TextField required={true} type="number" defaultValue= {this.defaultVotes} inputProps={{ min:1,style : {textAlign:"center"}}} onChange={this.handleVotesChange}/>
+
+We dont use (e) with the method we use this.handleRoomButtonPressed =  this.handleRoomButtonPressed.bind(this) for each function in the class constructor, and in the button we 
+used <Button color="primary" variant="contained" onClick={this.handleRoomButtonPressed}>
+
+handleRoomButtonPressed(){ //created the method
+        console.log(this.state); //check if the method is called
+        const requestOptions = { //created a variable json object
+            method: 'POST', //ajax call like statement , method = post 
+            headers: {'Content-Type':'application/json'}, //header as boiler plate
+            body: JSON.stringify({ //send data as json values
+                    votes_to_skip: this.state.votesToSkip, //get values from the updated states
+                    guest_can_pause: this.state.guestCanPause, //we use the same key as in views.py
+            }),
+        };
+        fetch('/api/createroom',requestOptions)
+        .then((response)=> //fetch method of react like python's reqeust 
+        response.json())  // we made a django view under /api/createroom with a post method
+        .then((data)=> console.log(data)) // and the response of the method is now logged
+
+    }
